@@ -121,7 +121,7 @@ export class ProdutoListComponent implements OnInit {
   }
 
   generateProductLink(produto: any): string {
-    return `https://miraculous-art-production.up.railway.app/produtos/${produto.produtoId}`;
+    return `https://ingenico-2-d-barcode-front-5m7h.vercel.app/produtos/${produto.produtoId}`;
   }
 
   updateQrCode(): void {
