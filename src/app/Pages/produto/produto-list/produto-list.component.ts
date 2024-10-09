@@ -121,7 +121,7 @@ export class ProdutoListComponent implements OnInit {
   }
 
   generateProductLink(produto: any): string {
-    return `http://localhost:4200/produtos/${produto.produtoId}`;
+    return `https://miraculous-art-production.up.railway.app/produtos/${produto.produtoId}`;
   }
 
   updateQrCode(): void {
