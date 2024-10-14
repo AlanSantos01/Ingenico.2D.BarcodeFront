@@ -84,11 +84,11 @@ export class QrCodeScannerComponent implements OnInit {
   }
 
   onCodeResult(result: string) {
-    if (result.startsWith('LINK:')) {
-      const link = result.substring('LINK:'.length);
+    if (result.startsWith('LINK - ')) {
+      const link = result.substring('LINK - '.length);
       this.handleLink(link);
-    } else if (result.startsWith('DADOS:')) {
-      const formattedData = result.substring('DADOS:'.length);
+    } else if (result.startsWith('Nome - ')) {
+      const formattedData = result;
       this.handleFormattedData(formattedData);
     } else {
       this.messageService.add({
