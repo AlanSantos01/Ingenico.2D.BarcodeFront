@@ -127,13 +127,13 @@ export class ProdutoListComponent implements OnInit {
   updateQrCode(): void {
     if (this.isLinkQrCode) {
       const link = this.generateProductLink(this.selectedProduct);
-      this.selectedQrCode = `LINK:${link}`;
+      this.selectedQrCode = `LINK - ${link}`;
     } else {
-      const productDataJson = JSON.stringify(this.selectedProduct);
-      this.selectedQrCode = `DADOS:${productDataJson}`;
+      const productDataJson = this.formatProdutoData(this.selectedProduct);
+      this.selectedQrCode = `${productDataJson}`;
     }
   }
-  
+
   formatProdutoData(produto: Produto): string {
     let formattedData = '';
     formattedData += `Nome - ${produto.nome}\n`;
