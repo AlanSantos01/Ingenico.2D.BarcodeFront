@@ -293,7 +293,9 @@ export class ProdutoFormComponent implements OnInit {
             }))
           : [];
         const nomeTags = Array.isArray(produto.tags)
-          ? produto.tags.map((tag: any) => tag.nome)
+          ? produto.tags.map((tag: any) => ({
+            nome: tag.nome,
+          }))
           : [];
 
         // Atualizando o formulário com os valores do produto
