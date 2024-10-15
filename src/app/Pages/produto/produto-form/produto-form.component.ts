@@ -511,7 +511,7 @@ export class ProdutoFormComponent implements OnInit {
     // Adicionando tags com índice no nome
     const tags = produtoForm.get('tags')?.value;
     tags.forEach((tag: any, index: number) => {
-      formData.append(`tags[${index}].nome`, tag);
+      formData.append(`tags[${index}].nome`, tag.nome);
     });
 
     // Se uma imagem foi selecionada, adiciona ao FormData
