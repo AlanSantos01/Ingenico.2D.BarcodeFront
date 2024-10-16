@@ -358,7 +358,6 @@ export class ProdutoFormComponent implements OnInit {
     };
 
     const formData = this.createFormData(this.produtoForm, this.selectedImage);
-    console.log('Produto cadastrado', novoProduto);
 
     if (this.produto && this.produto.produtoId) {
       // Atualizar produto existente

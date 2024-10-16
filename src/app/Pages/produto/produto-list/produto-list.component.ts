@@ -304,20 +304,10 @@ export class ProdutoListComponent implements OnInit {
     }
   }
 
-  // saveProduct(product: Produto): void {
-  //   if (this.isEditMode) {
-  //     if (product.id) {
-  //       this.produtoService.updateProduct(product.id, product).subscribe(() => {
-  //         this.loadProducts();
-  //       });
-  //     } else {
-  //       this.produtoService.createProduct(product).subscribe(() => {
-  //         this.loadProducts();
-  //       });
-  //     }
-  //   }
-  //   this.displayFormDialog = false;
-  // }
+  onCancel(): void {
+    this.selectedProduct = {} as Produto;
+    this.closeDetailsDialog();
+  }
 }
 
 function richTextToPlainText(richText: string): string {
