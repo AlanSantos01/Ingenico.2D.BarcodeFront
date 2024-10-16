@@ -79,7 +79,7 @@ export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
           }
         }
       }
-    }, 0);
+    }, 100);
 
   }
 
