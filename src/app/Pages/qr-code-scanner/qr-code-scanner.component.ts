@@ -52,10 +52,12 @@ export class QrCodeScannerComponent implements OnInit {
 
   // Verificação inicial para ativação do overlay
   checkIfMobile() {
+    if(typeof window !== 'undefined'){
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
       this.overlay = false;
     }
+  }
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
