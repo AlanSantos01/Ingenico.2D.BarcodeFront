@@ -23,6 +23,27 @@ section {
   margin: 0;
 }
 
+.ql-align-center{
+  text-align: center;
+}
+
+.ql-align-left{
+  text-align: left;
+}
+
+.ql-align-right{
+  text-align: right;
+}
+
+.ql-align-justify{
+  text-align: justify;
+}
+.descricao-produto{
+  img{
+    max-width: 400px;
+  }
+}
+
 .card-content {
   height: auto;
   display: flex;
