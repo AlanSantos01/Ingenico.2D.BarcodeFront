@@ -77,7 +77,7 @@ ngAfterViewInit() {
         });
       }
     }
-  }, 3000); 
+  }, 3000);
 }
 
   ngOnInit() {

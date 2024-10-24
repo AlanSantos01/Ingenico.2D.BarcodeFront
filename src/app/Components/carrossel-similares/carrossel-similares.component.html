@@ -7,11 +7,11 @@
     [responsiveOptions]="responsiveOptions">
     <ng-template let-productSimilar pTemplate="item">
       <div class="border-1 surface-border border-round m-2 p-3 card-similar">
-        <div class="mb-3">
-          <div class="relative mx-auto">
+        <div class="mb-3" style="display: flex;justify-content:center;">
+          <div class="relative mx-auto img-similar">
             <img
               [alt]="productSimilar.nome"
-              class="w-full border-round img-similar"
+              class="border-round"
               [src]="productImages[productSimilar.produtoId] ? 'data:image/png;base64,' + productImages[productSimilar.produtoId] : 'assets/noImage.svg'"/>
           </div> <!-- fim div image carrossel -->
         </div>
