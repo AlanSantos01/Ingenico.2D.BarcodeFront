@@ -107,7 +107,7 @@ export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
           });
         }
       }
-    }, 300); // Delay de 300ms para garantir que o DOM esteja completamente pronto
+    }, 2000); // Delay de 300ms para garantir que o DOM esteja completamente pronto
   }
 
   ngOnInit() {
