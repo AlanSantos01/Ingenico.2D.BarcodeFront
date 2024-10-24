@@ -38,87 +38,47 @@ export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
     private renderer: Renderer2
   ) {}
 
-  ngAfterViewInit() {
-    if (typeof document !== "undefined") {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach(() => {
-          const qlaligncenter = document.getElementsByClassName(
-            "ql-align-center"
-          ) as HTMLCollectionOf<HTMLElement>;
-          const qlalignleft = document.getElementsByClassName(
-            "ql-align-left"
-          ) as HTMLCollectionOf<HTMLElement>;
-          const qlalignright = document.getElementsByClassName(
-            "ql-align-right"
-          ) as HTMLCollectionOf<HTMLElement>;
-          const qlalignjustify = document.getElementsByClassName(
-            "ql-align-justify"
-          ) as HTMLCollectionOf<HTMLElement>;
-          const divDescricao = document.getElementsByClassName(
-            "descricao-produto"
-          ) as HTMLCollectionOf<HTMLElement>;
+ngAfterViewInit() {
+  setTimeout(() => {
+    if (typeof document !== 'undefined') {
+      const qlaligncenter = document.getElementsByClassName('ql-align-center') as HTMLCollectionOf<HTMLElement>;
+      const qlalignleft = document.getElementsByClassName('ql-align-left') as HTMLCollectionOf<HTMLElement>;
+      const qlalignright = document.getElementsByClassName('ql-align-right') as HTMLCollectionOf<HTMLElement>;
+      const qlalignjustify = document.getElementsByClassName('ql-align-justify') as HTMLCollectionOf<HTMLElement>;
+      const divDescricao = document.getElementsByClassName('descricao-produto') as HTMLCollectionOf<HTMLElement>;
 
-          if (qlaligncenter) {
-            Array.from(qlaligncenter).forEach((element) => {
-              this.renderer.setStyle(
-                element,
-                "text-align",
-                "center",
-                RendererStyleFlags2.Important
-              );
-            });
-          }
-          if (qlalignleft) {
-            Array.from(qlalignleft).forEach((element) => {
-              this.renderer.setStyle(
-                element,
-                "text-align",
-                "left",
-                RendererStyleFlags2.Important
-              );
-            });
-          }
-          if (qlalignright) {
-            Array.from(qlalignright).forEach((element) => {
-              this.renderer.setStyle(
-                element,
-                "text-align",
-                "right",
-                RendererStyleFlags2.Important
-              );
-            });
-          }
-          if (qlalignjustify) {
-            Array.from(qlalignjustify).forEach((element) => {
-              this.renderer.setStyle(
-                element,
-                "text-align",
-                "justify",
-                RendererStyleFlags2.Important
-              );
-            });
-          }
-
-          if (divDescricao) {
-            Array.from(divDescricao).forEach((element) => {
-              const images = element.getElementsByTagName("img");
-              Array.from(images).forEach((img) => {
-                this.renderer.setStyle(img, "max-width", "400px");
-              });
-            });
-          }
+      if (qlaligncenter) {
+        Array.from(qlaligncenter).forEach((element) => {
+          this.renderer.setStyle(element, 'text-align', 'center', RendererStyleFlags2.Important);
         });
-      });
+      }
+      if (qlalignleft) {
+        Array.from(qlalignleft).forEach((element) => {
+          this.renderer.setStyle(element, 'text-align', 'left', RendererStyleFlags2.Important);
+        });
+      }
+      if (qlalignright) {
+        Array.from(qlalignright).forEach((element) => {
+          this.renderer.setStyle(element, 'text-align', 'right', RendererStyleFlags2.Important);
+        });
+      }
+      if (qlalignjustify) {
+        Array.from(qlalignjustify).forEach((element) => {
+          this.renderer.setStyle(element, 'text-align', 'justify', RendererStyleFlags2.Important);
+        });
+      }
 
-      const targetNode =
-        document.getElementsByClassName("descricao-produto")[0];
-      const config = { childList: true, subtree: true };
-
-      if (targetNode) {
-        observer.observe(targetNode, config);
+      if (divDescricao) {
+        Array.from(divDescricao).forEach((element) => {
+          const images = element.getElementsByTagName('img');
+          Array.from(images).forEach((img) => {
+            this.renderer.setStyle(img, 'max-width', '400px');
+          });
+        });
       }
     }
-  }
+  }, 3000); 
+}
 
   ngOnInit() {
     if (!this.product) {
