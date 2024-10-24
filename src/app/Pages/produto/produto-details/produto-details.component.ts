@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, Renderer2, RendererStyleFlags2} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProdutosService} from '../../../Services/Produto/produtos.service';
 import {Produto} from '../../../Models/product.model';
@@ -21,12 +21,12 @@ import {RippleModule} from 'primeng/ripple';
     Button,
     CarrosselSimilaresComponent,
     ButtonModule,
-    RippleModule
+    RippleModule,
   ],
   templateUrl: './produto-details.component.html',
   styleUrl: './produto-details.component.scss',
 })
-export class ProdutoDetailsComponent implements OnInit{
+export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
   @Input() product: any = {};
   produtosSimilares: Produto[] = [];
   imagemProduto: number[] = [];
@@ -35,9 +35,80 @@ export class ProdutoDetailsComponent implements OnInit{
     private route: ActivatedRoute,
     private productService: ProdutosService,
     private router: Router,
-  ) {
-  }
+    private renderer: Renderer2
+  ) {}
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (typeof document !== 'undefined') {
+        const qlaligncenter = document.getElementsByClassName(
+          'ql-align-center'
+        ) as HTMLCollectionOf<HTMLElement>;
+        const qlalignleft = document.getElementsByClassName(
+          'ql-align-left'
+        ) as HTMLCollectionOf<HTMLElement>;
+        const qlalignright = document.getElementsByClassName(
+          'ql-align-right'
+        ) as HTMLCollectionOf<HTMLElement>;
+        const qlalignjustify = document.getElementsByClassName(
+          'ql-align-justify'
+        ) as HTMLCollectionOf<HTMLElement>;
+        const divDescricao = document.getElementsByClassName(
+          'descricao-produto'
+        ) as HTMLCollectionOf<HTMLElement>;
+
+        if (qlaligncenter) {
+          Array.from(qlaligncenter).forEach((element) => {
+            this.renderer.setStyle(
+              element,
+              'text-align',
+              'center',
+              RendererStyleFlags2.Important
+            );
+          });
+        }
+        if (qlalignleft) {
+          Array.from(qlalignleft).forEach((element) => {
+            this.renderer.setStyle(
+              element,
+              'text-align',
+              'left',
+              RendererStyleFlags2.Important
+            );
+          });
+        }
+        if (qlalignright) {
+          Array.from(qlalignright).forEach((element) => {
+            this.renderer.setStyle(
+              element,
+              'text-align',
+              'right',
+              RendererStyleFlags2.Important
+            );
+          });
+        }
+        if (qlalignjustify) {
+          Array.from(qlalignjustify).forEach((element) => {
+            this.renderer.setStyle(
+              element,
+              'text-align',
+              'justify',
+              RendererStyleFlags2.Important
+            );
+          });
+        }
+
+        if (divDescricao) {
+          Array.from(divDescricao).forEach((element) => {
+            const images = element.getElementsByTagName('img');
+            Array.from(images).forEach((img) => {
+              this.renderer.setStyle(img, 'max-width', '400px');
+            });
+          });
+        }
+      }
+    }, 300); // Delay de 300ms para garantir que o DOM esteja completamente pronto
+  }
 
   ngOnInit() {
     if (!this.product) {
@@ -50,7 +121,6 @@ export class ProdutoDetailsComponent implements OnInit{
           ...data,
           categorias: data.categorias.map((categoria: any) => categoria.nome),
         };
-
       });
 
       this.productService
