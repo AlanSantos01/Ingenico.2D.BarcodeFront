@@ -11,7 +11,7 @@ import {CarrosselSimilaresComponent} from '../../../Components/carrossel-similar
 import {RippleModule} from 'primeng/ripple';
 
 @Component({
-  selector: 'app-produto-details',
+  selector: "app-produto-details",
   standalone: true,
   imports: [
     CommonModule,
@@ -23,8 +23,8 @@ import {RippleModule} from 'primeng/ripple';
     ButtonModule,
     RippleModule,
   ],
-  templateUrl: './produto-details.component.html',
-  styleUrl: './produto-details.component.scss',
+  templateUrl: "./produto-details.component.html",
+  styleUrl: "./produto-details.component.scss",
 })
 export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
   @Input() product: any = {};
@@ -39,82 +39,92 @@ export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      if (typeof document !== 'undefined') {
-        const qlaligncenter = document.getElementsByClassName(
-          'ql-align-center'
-        ) as HTMLCollectionOf<HTMLElement>;
-        const qlalignleft = document.getElementsByClassName(
-          'ql-align-left'
-        ) as HTMLCollectionOf<HTMLElement>;
-        const qlalignright = document.getElementsByClassName(
-          'ql-align-right'
-        ) as HTMLCollectionOf<HTMLElement>;
-        const qlalignjustify = document.getElementsByClassName(
-          'ql-align-justify'
-        ) as HTMLCollectionOf<HTMLElement>;
-        const divDescricao = document.getElementsByClassName(
-          'descricao-produto'
-        ) as HTMLCollectionOf<HTMLElement>;
+    if (typeof document !== "undefined") {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach(() => {
+          const qlaligncenter = document.getElementsByClassName(
+            "ql-align-center"
+          ) as HTMLCollectionOf<HTMLElement>;
+          const qlalignleft = document.getElementsByClassName(
+            "ql-align-left"
+          ) as HTMLCollectionOf<HTMLElement>;
+          const qlalignright = document.getElementsByClassName(
+            "ql-align-right"
+          ) as HTMLCollectionOf<HTMLElement>;
+          const qlalignjustify = document.getElementsByClassName(
+            "ql-align-justify"
+          ) as HTMLCollectionOf<HTMLElement>;
+          const divDescricao = document.getElementsByClassName(
+            "descricao-produto"
+          ) as HTMLCollectionOf<HTMLElement>;
 
-        if (qlaligncenter) {
-          Array.from(qlaligncenter).forEach((element) => {
-            this.renderer.setStyle(
-              element,
-              'text-align',
-              'center',
-              RendererStyleFlags2.Important
-            );
-          });
-        }
-        if (qlalignleft) {
-          Array.from(qlalignleft).forEach((element) => {
-            this.renderer.setStyle(
-              element,
-              'text-align',
-              'left',
-              RendererStyleFlags2.Important
-            );
-          });
-        }
-        if (qlalignright) {
-          Array.from(qlalignright).forEach((element) => {
-            this.renderer.setStyle(
-              element,
-              'text-align',
-              'right',
-              RendererStyleFlags2.Important
-            );
-          });
-        }
-        if (qlalignjustify) {
-          Array.from(qlalignjustify).forEach((element) => {
-            this.renderer.setStyle(
-              element,
-              'text-align',
-              'justify',
-              RendererStyleFlags2.Important
-            );
-          });
-        }
-
-        if (divDescricao) {
-          Array.from(divDescricao).forEach((element) => {
-            const images = element.getElementsByTagName('img');
-            Array.from(images).forEach((img) => {
-              this.renderer.setStyle(img, 'max-width', '400px');
+          if (qlaligncenter) {
+            Array.from(qlaligncenter).forEach((element) => {
+              this.renderer.setStyle(
+                element,
+                "text-align",
+                "center",
+                RendererStyleFlags2.Important
+              );
             });
-          });
-        }
+          }
+          if (qlalignleft) {
+            Array.from(qlalignleft).forEach((element) => {
+              this.renderer.setStyle(
+                element,
+                "text-align",
+                "left",
+                RendererStyleFlags2.Important
+              );
+            });
+          }
+          if (qlalignright) {
+            Array.from(qlalignright).forEach((element) => {
+              this.renderer.setStyle(
+                element,
+                "text-align",
+                "right",
+                RendererStyleFlags2.Important
+              );
+            });
+          }
+          if (qlalignjustify) {
+            Array.from(qlalignjustify).forEach((element) => {
+              this.renderer.setStyle(
+                element,
+                "text-align",
+                "justify",
+                RendererStyleFlags2.Important
+              );
+            });
+          }
+
+          if (divDescricao) {
+            Array.from(divDescricao).forEach((element) => {
+              const images = element.getElementsByTagName("img");
+              Array.from(images).forEach((img) => {
+                this.renderer.setStyle(img, "max-width", "400px");
+              });
+            });
+          }
+        });
+      });
+
+      const targetNode =
+        document.getElementsByClassName("descricao-produto")[0];
+      const config = { childList: true, subtree: true };
+
+      if (targetNode) {
+        observer.observe(targetNode, config);
       }
-    }, 2000); // Delay de 300ms para garantir que o DOM esteja completamente pronto
+    }
   }
 
   ngOnInit() {
     if (!this.product) {
       this.product = {} as Produto;
     }
-    const idString = this.route.snapshot.paramMap.get('id');
+    const idString = this.route.snapshot.paramMap.get("id");
     if (idString) {
       this.productService.getProductById(idString).subscribe((data: any) => {
         this.product = {
@@ -136,6 +146,6 @@ export class ProdutoDetailsComponent implements OnInit, AfterViewInit {
   }
 
   voltarParaLeituraQR() {
-    this.router.navigate(['/leitor-qrcode']).then();
+    this.router.navigate(["/leitor-qrcode"]).then();
   }
 }
