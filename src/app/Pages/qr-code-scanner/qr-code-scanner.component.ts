@@ -1,19 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {ZXingScannerModule} from '@zxing/ngx-scanner';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {DropdownChangeEvent, DropdownModule} from 'primeng/dropdown';
-import {ToastModule} from 'primeng/toast';
-import {MessageService} from 'primeng/api';
-import {MessageModule} from 'primeng/message';
-import {BarcodeFormat} from '@zxing/library';
-import {DialogModule} from 'primeng/dialog';
-import {ButtonModule} from "primeng/button";
-import {StyleClassModule} from "primeng/styleclass";
-import { Produto } from '../../Models/product.model';
+import { Component, OnInit } from "@angular/core";
+import { ZXingScannerModule } from "@zxing/ngx-scanner";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { DropdownChangeEvent, DropdownModule } from "primeng/dropdown";
+import { ToastModule } from "primeng/toast";
+import { MessageService } from "primeng/api";
+import { MessageModule } from "primeng/message";
+import { BarcodeFormat } from "@zxing/library";
+import { DialogModule } from "primeng/dialog";
+import { ButtonModule } from "primeng/button";
+import { Produto } from "../../Models/product.model";
 
 @Component({
-  selector: 'app-qr-code-scanner',
+  selector: "app-qr-code-scanner",
   standalone: true,
   imports: [
     CommonModule,
@@ -24,10 +23,9 @@ import { Produto } from '../../Models/product.model';
     MessageModule,
     DialogModule,
     ButtonModule,
-    StyleClassModule
   ],
-  templateUrl: './qr-code-scanner.component.html',
-  styleUrls: ['./qr-code-scanner.component.scss'],
+  templateUrl: "./qr-code-scanner.component.html",
+  styleUrls: ["./qr-code-scanner.component.scss"],
   providers: [],
 })
 export class QrCodeScannerComponent implements OnInit {
@@ -43,21 +41,54 @@ export class QrCodeScannerComponent implements OnInit {
   displayModal: boolean = false;
 
   overlay: boolean = true;
+  isMobile: boolean = false;
 
   constructor(private messageService: MessageService) {}
 
   ngOnInit() {
     this.checkIfMobile();
+    if (!this.isMobile) {
+      if (typeof localStorage !== "undefined") {
+        const permissionGranted = localStorage.getItem(
+          "cameraPermissionGranted"
+        );
+        if (permissionGranted === "true") {
+          this.initializeCamera();
+        }
+      } else {
+        console.warn("Local storage não disponível");
+      }
+    }
+  }
+
+  // Teste para aumentar velocidade de abertura da camera
+  initializeCamera(): void {
+    if (typeof navigator !== "undefined") {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          this.onCamerasFound([
+            stream.getVideoTracks()[0].getSettings() as MediaDeviceInfo,
+          ]);
+          this.hasPermission = true;
+        })
+        .catch((err) => {
+          console.error("Erro ao inicializar a câmera:", err);
+          this.hasPermission = false;
+        });
+    } else {
+      console.warn("Navigator não disponível");
+    }
   }
 
   // Verificação inicial para ativação do overlay
   checkIfMobile() {
-    if(typeof window !== 'undefined'){
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      this.overlay = false;
+    if (typeof window !== "undefined") {
+      this.isMobile = window.innerWidth <= 768;
+      if (this.isMobile) {
+        this.overlay = false;
+      }
     }
-  }
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -66,7 +97,7 @@ export class QrCodeScannerComponent implements OnInit {
   }
 
   onDeviceSelectChange(event: DropdownChangeEvent) {
-    const selectedDeviceId = event.value?.deviceId || ''; // Garante que 'event.value' é tratado corretamente
+    const selectedDeviceId = event.value?.deviceId || ""; // Garante que 'event.value' é tratado corretamente
 
     // Atualiza o dispositivo atual
     if (selectedDeviceId) {
@@ -77,18 +108,18 @@ export class QrCodeScannerComponent implements OnInit {
         this.deviceSelected = device.deviceId;
         this.currentDevice = device; // Atualiza a câmera no scanner
       } else {
-        this.deviceSelected = '';
+        this.deviceSelected = "";
         this.currentDevice = undefined; // Se limpar, remove a câmera
       }
     } else {
       // Se limpar a seleção, definimos o dispositivo como undefined
-      this.deviceSelected = '';
+      this.deviceSelected = "";
       this.currentDevice = undefined;
     }
   }
 
   onDeviceChange(device: MediaDeviceInfo) {
-    const selectedStr = device?.deviceId || '';
+    const selectedStr = device?.deviceId || "";
     if (this.deviceSelected === selectedStr) {
       return;
     }
@@ -98,21 +129,48 @@ export class QrCodeScannerComponent implements OnInit {
 
   onHasPermission(has: boolean): void {
     this.hasPermission = has;
+
+    if (!this.isMobile) {
+      if (
+        typeof localStorage !== "undefined" &&
+        typeof navigator !== "undefined"
+      ) {
+        if (has) {
+          localStorage.setItem("cameraPermissionGranted", "true"); // Armazena a permissão
+          this.initializeCamera(); // Inicia a câmera se a permissão foi dada agora
+        } else {
+          navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then((stream) => {
+              this.hasPermission = true;
+              localStorage.setItem("cameraPermissionGranted", "true"); // Armazena a permissão
+              this.onCamerasFound([
+                stream.getVideoTracks()[0].getSettings() as MediaDeviceInfo,
+              ]);
+            })
+            .catch((error) =>
+              console.error("Erro ao obter permissão da câmera:", error)
+            );
+        }
+      } else {
+        console.warn("Local storage ou Navigator não disponível");
+      }
+    }
   }
 
   onCodeResult(result: string) {
     // console.log('Resultado do QR code:', result);
-    if (result.startsWith('LINK - ')) {
-      const link = result.substring('LINK - '.length);
+    if (result.startsWith("LINK - ")) {
+      const link = result.substring("LINK - ".length);
       this.handleLink(link);
-    } else if (result.startsWith('Nome - ')) {
+    } else if (result.startsWith("Nome - ")) {
       const formattedData = result;
       this.handleFormattedData(formattedData);
     } else {
       this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'QR code não reconhecido',
+        severity: "error",
+        summary: "Erro",
+        detail: "QR code não reconhecido",
       });
     }
   }
@@ -122,63 +180,65 @@ export class QrCodeScannerComponent implements OnInit {
   }
 
   handleFormattedData(data: string): void {
-    this.dadosProduto = this.converterParaProduto(data)
-    console.log("NOME DO PRODUTO" ,this.dadosProduto.nome);
+    this.dadosProduto = this.converterParaProduto(data);
+    console.log("NOME DO PRODUTO", this.dadosProduto.nome);
     this.displayModal = true;
   }
 
   converterParaProduto(dados: string): Produto {
-    const linhas = dados.split('\n'); // Dividir as linhas do texto
+    const linhas = dados.split("\n"); // Dividir as linhas do texto
     const produto: Partial<Produto> = {
       tags: [],
-      categorias: []
+      categorias: [],
     }; // Partial para permitir campos opcionais até o objeto estar completo
 
     linhas.forEach((linha) => {
-      const [chave, valor] = linha.split(' - '); // Separar chave e valor
+      const [chave, valor] = linha.split(" - "); // Separar chave e valor
       if (chave && valor) {
         const chaveLimpa = chave.trim();
         const valorLimpo = valor.trim();
 
         // Mapear as chaves para a interface Produto
         switch (chaveLimpa) {
-          case 'Nome':
+          case "Nome":
             produto.nome = valorLimpo;
             break;
-          case 'Ingredientes':
+          case "Ingredientes":
             produto.ingredientes = valorLimpo;
             break;
-          case 'Descrição':
+          case "Descrição":
             produto.descricao = valorLimpo;
             break;
-          case 'Marca':
+          case "Marca":
             produto.marca = valorLimpo;
             break;
-          case 'Peso':
-            const [peso, unidade] = valorLimpo.split(' ');
+          case "Peso":
+            const [peso, unidade] = valorLimpo.split(" ");
             produto.peso = parseFloat(peso);
             produto.unidadeMedida = unidade;
             break;
-          case 'Preço':
+          case "Preço":
             produto.preco = parseFloat(valorLimpo);
             break;
-          case 'País de Origem':
+          case "País de Origem":
             produto.paisOrigem = valorLimpo;
             break;
-          case 'Categorias':
-            produto.categorias = valorLimpo.split(',').map((categoria) => categoria.trim());
+          case "Categorias":
+            produto.categorias = valorLimpo
+              .split(",")
+              .map((categoria) => categoria.trim());
             break;
-          case 'Validade':
+          case "Validade":
             produto.validade = new Date(valorLimpo);
             break;
-          case 'Data de Fabricação':
+          case "Data de Fabricação":
             produto.dataFabricacao = new Date(valorLimpo);
             break;
-          case 'Lote':
+          case "Lote":
             produto.lote = valorLimpo;
             break;
-          case 'Tags':
-            produto.tags = valorLimpo.split(',').map((tag) => tag.trim());
+          case "Tags":
+            produto.tags = valorLimpo.split(",").map((tag) => tag.trim());
             break;
           default:
             // Caso haja alguma chave desconhecida
@@ -191,16 +251,9 @@ export class QrCodeScannerComponent implements OnInit {
   }
 
   clickOverlay() {
-    const div = document.getElementsByClassName('scanner-overlay')[0];
-    if (div) {
-      div.classList.add('slide-up');
-      setTimeout(() => {
-        this.overlay = false;
-      }, 1000); // Tempo da animação
-      setTimeout(() => {
-        this.overlay = true;
-        div.classList.remove('slide-up');
-      }, 20000);
-    }
+    this.overlay = false;
+    setTimeout(() => {
+      this.overlay = true;
+    }, 10000);
   }
 }
