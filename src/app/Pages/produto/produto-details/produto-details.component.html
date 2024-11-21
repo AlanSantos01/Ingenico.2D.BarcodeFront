@@ -1,8 +1,8 @@
 <section>
   <div class="container">
     <div class="button-container">
-  <button pButton type="button" label="Voltar" icon="pi pi-arrow-left" (click)="voltarParaLeituraQR()"></button>
-</div>
+      <button pButton type="button" label="Voltar" icon="pi pi-arrow-left" (click)="voltarParaLeituraQR()"></button>
+    </div>
 
     <h1 class="card-title">{{ product.nome || "Nome do Produto" }}</h1>
     <!-- CONTAINER IMAGEM E DETALHES -->
@@ -42,6 +42,9 @@
         </div>
       </div>
     </div>
+    <div class="flex flex-row w-full gap-2 mt-5 justify-content-center">
+      <p-chip *ngFor="let tag of product.tags" styleClass="bg-transparent border-1 border-blue-800 text-blue-800 font-bold pl-2 pr-2 pt-1 pb-1">{{tag.nome}}</p-chip>
+    </div>
     <!-- CONTAINER DESCRICAO DO PRODUTO -->
     <div class="detalhes">
       <h3>DESCRIÇÃO</h3>
@@ -50,10 +53,7 @@
         <tr>
           <td class="cabecalho">CATEGORIA:</td>
           <td class="conteudo">
-              <span *ngFor="let categoria of product.categorias; let i = index">
-                {{
-                  categoria
-                }}<span *ngIf="i < product.categorias.length - 1">, </span>
+              <span *ngFor="let categoria of product.categorias; let i = index">{{categoria}}<span *ngIf="i < product.categorias.length - 1">,</span>
               </span>
           </td>
         </tr>

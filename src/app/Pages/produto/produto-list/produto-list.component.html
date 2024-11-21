@@ -184,12 +184,13 @@
         </table>
       </div>
       <div style="display: flex; justify-content: center;margin-top: 30px;">
-        <p-button
-          type="button"
+        <button
           (click)="onCancel()"
-          label="Fechar"
-          [style]="{background: 'white', 'border-color': '#0C1E58', color: '#0C1E58', width: '100%'}"
-        ></p-button>
+          style="font-size:1.1rem;"
+          class="w-8rem h-3rem bg-transparent border-2 border-blue-800 border-round text-blue-800 font-bold hover:text-blue-600 hover:border-blue-600 cursor-pointer">
+          <i class="pi pi-times"></i>
+          Fechar
+        </button>
       </div>
     </section>
   </p-dialog>
