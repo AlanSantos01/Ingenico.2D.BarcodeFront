@@ -142,7 +142,7 @@ export class ProdutoListComponent implements OnInit {
     let formattedData = '';
     formattedData += `Nome - ${produto.nome}\n`;
     formattedData += `Ingredientes - ${produto.ingredientes}\n`;
-    formattedData += `Descrição - ${produto.descricao}\n`;
+    // formattedData += `Descrição - ${produto.descricao}\n`;
     formattedData += `Marca - ${produto.marca}\n`;
     formattedData += `Peso - ${produto.peso} ${produto.unidadeMedida}\n`;
     formattedData += `Preço - ${produto.preco}\n`;
