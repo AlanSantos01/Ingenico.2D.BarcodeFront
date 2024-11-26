@@ -219,6 +219,8 @@ export class QrCodeScannerComponent implements OnInit {
             break;
           case "Preço":
             produto.preco = valorLimpo.replace(".", ",");
+            console.log(valorLimpo);
+            console.log(produto.preco);
             break;
           case "País de Origem":
             produto.paisOrigem = valorLimpo;
