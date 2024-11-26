@@ -214,11 +214,11 @@ export class QrCodeScannerComponent implements OnInit {
             break;
           case "Peso":
             const [peso, unidade] = valorLimpo.split(" ");
-            produto.peso = parseFloat(peso).toString().replace(".", ",");
+            produto.peso = parseFloat(peso);
             produto.unidadeMedida = unidade;
             break;
           case "Preço":
-            produto.preco = parseFloat(valorLimpo).toString().replace(".", ",");
+            produto.preco = valorLimpo.replace(".", ",");
             break;
           case "País de Origem":
             produto.paisOrigem = valorLimpo;
