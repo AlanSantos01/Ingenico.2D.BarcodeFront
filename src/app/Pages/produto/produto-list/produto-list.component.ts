@@ -145,7 +145,7 @@ export class ProdutoListComponent implements OnInit {
     // formattedData += `Descrição - ${produto.descricao}\n`;
     formattedData += `Marca - ${produto.marca}\n`;
     formattedData += `Peso - ${produto.peso} ${produto.unidadeMedida}\n`;
-    formattedData += `Preço - ${produto.preco}\n`;
+    formattedData += `Preço - ${produto.preco.replace(".", ",")}\n`;
     formattedData += `Validade - ${produto.validade}\n`;
     formattedData += `Data de Fabricação - ${produto.dataFabricacao}\n`;
     formattedData += `Lote - ${produto.lote}\n`;
