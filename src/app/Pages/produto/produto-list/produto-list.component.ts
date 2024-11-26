@@ -93,7 +93,7 @@ export class ProdutoListComponent implements OnInit {
 
   loadProducts(): void {
     const page = this.first / this.rows;
-    this.produtoService.getAllProducts(page, this.rows).subscribe((result: { data: Produto[]; total: number; }) => {
+    this.produtoService.getAllProducts(page, this.rows).subscribe((result) => {
       this.produtos = result.data;
       this.totalRecords = result.total; // Total de registros
     });
@@ -114,9 +114,7 @@ export class ProdutoListComponent implements OnInit {
     this.produtoService
       .getProductById(produto.produtoId!)
       .subscribe((data: any) => {
-        const newData = JSON.parse(data);
-        newData.preco = newData.preco.toString();
-        this.selectedProduct = newData;
+        this.selectedProduct = data;
         this.selectedProduct.descricao = richTextToPlainText(data.descricao);
         this.infoQrCode = JSON.stringify(data);
         // Atualiza o QR code com base no estado atual do switch
@@ -147,7 +145,7 @@ export class ProdutoListComponent implements OnInit {
     // formattedData += `Descrição - ${produto.descricao}\n`;
     formattedData += `Marca - ${produto.marca}\n`;
     formattedData += `Peso - ${produto.peso} ${produto.unidadeMedida}\n`;
-    formattedData += `Preço - ${produto.preco?.replace(".", ",")}\n`;
+    formattedData += `Preço - ${produto.preco}\n`;
     formattedData += `Validade - ${produto.validade}\n`;
     formattedData += `Data de Fabricação - ${produto.dataFabricacao}\n`;
     formattedData += `Lote - ${produto.lote}\n`;
@@ -221,7 +219,7 @@ export class ProdutoListComponent implements OnInit {
 
   deleteProduct(produto: Produto): void {
     this.produtoService.getProductById(produto.produtoId!).subscribe({
-      next: (detalhesProduto: { nome: any; }) => {
+      next: (detalhesProduto) => {
         this.confirmationService.confirm({
           message: 'Você tem certeza que deseja excluir este produto?',
           header: 'Confirmação de Exclusão',
@@ -242,7 +240,7 @@ export class ProdutoListComponent implements OnInit {
                 });
                 this.loadProducts();
               },
-              error: (error: any) => {
+              error: (error) => {
                 console.error('Erro ao excluir produto:', error);
                 this.messageService.add({
                   severity: 'error',
@@ -257,7 +255,7 @@ export class ProdutoListComponent implements OnInit {
           },
         });
       },
-      error: (error: any) => {
+      error: (error) => {
         console.error('Erro ao obter detalhes do produto:', error);
         this.messageService.add({
           severity: 'error',
