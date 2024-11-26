@@ -7,8 +7,8 @@ export interface Produto {
   ingredientes: string;
   descricao: string;
   marca: string;
-  peso: number;
-  preco: number;
+  peso: string;
+  preco: string;
   unidadeMedida: string;
   paisOrigem: string;
   tags: string[];
