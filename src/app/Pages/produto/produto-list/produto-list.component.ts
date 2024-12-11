@@ -1,31 +1,30 @@
-import {Component, LOCALE_ID, OnInit} from '@angular/core';
-import {Produto} from '../../../Models/product.model';
-import {ProdutosService} from '../../../Services/Produto/produtos.service';
-import {DialogModule} from 'primeng/dialog';
-import {DropdownModule} from 'primeng/dropdown';
-import {TableModule} from 'primeng/table';
-import {FormsModule} from '@angular/forms';
-import {CommonModule, registerLocaleData} from '@angular/common';
-import {ButtonModule} from 'primeng/button';
-import {PaginatorModule} from 'primeng/paginator';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ToastModule} from 'primeng/toast';
-import {InputTextModule} from 'primeng/inputtext';
-import {InputTextareaModule} from 'primeng/inputtextarea';
-import {InputNumberModule} from 'primeng/inputnumber';
-import {CheckboxModule} from 'primeng/checkbox';
-import {InputMaskModule} from 'primeng/inputmask';
-import {CardModule} from 'primeng/card';
-import {TooltipModule} from 'primeng/tooltip';
-import {ProdutoFormComponent} from '../produto-form/produto-form.component';
-import {ProdutoDetailsComponent} from '../produto-details/produto-details.component';
-import {QRCodeModule} from 'angularx-qrcode';
-import {ProgressSpinnerModule} from 'primeng/progressspinner';
-import {InputSwitchModule} from 'primeng/inputswitch';
+import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { Produto } from '../../../Models/product.model';
+import { ProdutosService } from '../../../Services/Produto/produtos.service';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputMaskModule } from 'primeng/inputmask';
+import { CardModule } from 'primeng/card';
+import { TooltipModule } from 'primeng/tooltip';
+import { ProdutoFormComponent } from '../produto-form/produto-form.component';
+import { ProdutoDetailsComponent } from '../produto-details/produto-details.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import localePt from '@angular/common/locales/pt';
 import { environment } from '../../../../environments/environment.development';
-
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -59,7 +58,11 @@ registerLocaleData(localePt, 'pt-BR');
   ],
   templateUrl: './produto-list.component.html',
   styleUrl: './produto-list.component.scss',
-  providers: [ConfirmationService, MessageService, { provide: LOCALE_ID, useValue: 'pt-BR' }],
+  providers: [
+    ConfirmationService,
+    MessageService,
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+  ],
 })
 export class ProdutoListComponent implements OnInit {
   produtos: Produto[] = [];
@@ -93,7 +96,7 @@ export class ProdutoListComponent implements OnInit {
 
   loadProducts(): void {
     const page = this.first / this.rows;
-    this.produtoService.getAllProducts(page, this.rows).subscribe((result: { data: Produto[]; total: number; }) => {
+    this.produtoService.getAllProducts(page, this.rows).subscribe((result) => {
       this.produtos = result.data;
       this.totalRecords = result.total; // Total de registros
     });
@@ -114,9 +117,7 @@ export class ProdutoListComponent implements OnInit {
     this.produtoService
       .getProductById(produto.produtoId!)
       .subscribe((data: any) => {
-        const newData = JSON.parse(data);
-        newData.preco = newData.preco.toString();
-        this.selectedProduct = newData;
+        this.selectedProduct = data;
         this.selectedProduct.descricao = richTextToPlainText(data.descricao);
         this.infoQrCode = JSON.stringify(data);
         // Atualiza o QR code com base no estado atual do switch
@@ -128,7 +129,6 @@ export class ProdutoListComponent implements OnInit {
   generateProductLink(produto: any): string {
     return `${this.deployUrl}/produtos/${produto.produtoId}`;
   }
-
 
   updateQrCode(): void {
     if (this.isLinkQrCode) {
@@ -147,7 +147,7 @@ export class ProdutoListComponent implements OnInit {
     // formattedData += `Descrição - ${produto.descricao}\n`;
     formattedData += `Marca - ${produto.marca}\n`;
     formattedData += `Peso - ${produto.peso} ${produto.unidadeMedida}\n`;
-    formattedData += `Preço - ${produto.preco?.replace(".", ",")}\n`;
+    formattedData += `Preço - ${produto.preco}\n`;
     formattedData += `Validade - ${produto.validade}\n`;
     formattedData += `Data de Fabricação - ${produto.dataFabricacao}\n`;
     formattedData += `Lote - ${produto.lote}\n`;
@@ -221,7 +221,7 @@ export class ProdutoListComponent implements OnInit {
 
   deleteProduct(produto: Produto): void {
     this.produtoService.getProductById(produto.produtoId!).subscribe({
-      next: (detalhesProduto: { nome: any; }) => {
+      next: (detalhesProduto) => {
         this.confirmationService.confirm({
           message: 'Você tem certeza que deseja excluir este produto?',
           header: 'Confirmação de Exclusão',
@@ -242,7 +242,7 @@ export class ProdutoListComponent implements OnInit {
                 });
                 this.loadProducts();
               },
-              error: (error: any) => {
+              error: (error) => {
                 console.error('Erro ao excluir produto:', error);
                 this.messageService.add({
                   severity: 'error',
@@ -257,7 +257,7 @@ export class ProdutoListComponent implements OnInit {
           },
         });
       },
-      error: (error: any) => {
+      error: (error) => {
         console.error('Erro ao obter detalhes do produto:', error);
         this.messageService.add({
           severity: 'error',
